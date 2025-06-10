@@ -1,103 +1,131 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import { FaCode } from "react-icons/fa";
 
-export default function Home() {
+export default function Index() {
+  const [name, setName] = useState("");
+  const [leetques, setLeetques] = useState("");
+  const [codeforcesRating, setCodeforcesRating] = useState("");
+  const [codechefRating, setCodechefRating] = useState("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!name.trim()) newErrors.name = "Username is required";
+    if (!leetques.trim()) newErrors.leetques = "LeetCode ID is required";
+    if (!codeforcesRating.trim())
+      newErrors.codeforcesRating = "Codeforces ID is required";
+    if (!codechefRating.trim())
+      newErrors.codechefRating = "CodeChef ID is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const userData = {
+      name: name.trim(),
+      leetCodeId: leetques.trim(),
+      codeforcesId: codeforcesRating.trim(),
+      codechefId: codechefRating.trim(),
+    };
+
+    localStorage.setItem("userData", JSON.stringify(userData));
+    window.location.href = "/profile";
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gray-900">
+      <Navbar />
+      <div className="flex flex-col items-center justify-center min-h-screen p-8">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gray-800 rounded-lg shadow-xl p-8 mb-8 w-full max-w-md"
+          noValidate
+        >
+          <div className="flex items-center justify-center mb-6 space-x-2">
+            <h2 className="text-2xl font-bold text-white text-center">
+              CodeMate
+            </h2>
+            <FaCode className="text-orange-500 text-2xl" />
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {/* Inputs */}
+          {[
+            {
+              id: "name",
+              label: "Username",
+              value: name,
+              setValue: setName,
+              errorKey: "name",
+            },
+            {
+              id: "leetques",
+              label: "LeetCode ID",
+              value: leetques,
+              setValue: setLeetques,
+              errorKey: "leetques",
+            },
+            {
+              id: "codeforcesRating",
+              label: "Codeforces ID",
+              value: codeforcesRating,
+              setValue: setCodeforcesRating,
+              errorKey: "codeforcesRating",
+            },
+            {
+              id: "codechefRating",
+              label: "CodeChef ID",
+              value: codechefRating,
+              setValue: setCodechefRating,
+              errorKey: "codechefRating",
+            },
+          ].map(({ id, label, value, setValue, errorKey }) => (
+            <div className="mb-4" key={id}>
+              <label
+                htmlFor={id}
+                className="block text-white text-sm font-bold mb-2"
+              >
+                {label}:
+              </label>
+              <input
+                type="text"
+                id={id}
+                required
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                  errors[errorKey] ? "border-red-500" : ""
+                }`}
+                placeholder={`Enter your ${label}`}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                aria-describedby={`${id}-error`}
+                aria-invalid={!!errors[errorKey]}
+              />
+              {errors[errorKey] && (
+                <p
+                  className="text-red-500 text-xs italic mt-1"
+                  role="alert"
+                  id={`${id}-error`}
+                >
+                  {errors[errorKey]}
+                </p>
+              )}
+            </div>
+          ))}
+
+          <div className="flex items-center justify-center">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-transform transform hover:scale-105"
+              type="submit"
+            >
+              Let's Go!!
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
