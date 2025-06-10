@@ -1,67 +1,112 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Navbar from "./components/Navbar";
+import { FaCode } from "react-icons/fa";
 
-export default function Home() {
+export default function Index() {
   const [name, setName] = useState("");
-  const [leetcode, setLeetcode] = useState("");
-  const [codeforces, setCodeforces] = useState("");
-  const [codechef, setCodechef] = useState("");
+  const [leetques, setLeetques] = useState("");
+  const [codeforcesRating, setCodeforcesRating] = useState("");
+  const [codechefRating, setCodechefRating] = useState("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const router = useRouter();
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!name.trim()) newErrors.name = "Username is required";
+    if (!leetques.trim()) newErrors.leetques = "LeetCode ID is required";
+    if (!codeforcesRating.trim())
+      newErrors.codeforcesRating = "Codeforces ID is required";
+    if (!codechefRating.trim())
+      newErrors.codechefRating = "CodeChef ID is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  const handleSubmit = () => {
-    const data = {
-      name,
-      leetcode,
-      codeforces,
-      codechef,
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const userData = {
+      name: name.trim(),
+      leetcode: leetques.trim(),
+      codeforces: codeforcesRating.trim(),
+      codechef: codechefRating.trim(),
     };
 
-    localStorage.setItem("userData", JSON.stringify(data));
-    router.push("/profile");
+    localStorage.setItem("userData", JSON.stringify(userData));
+    window.location.href = "/profile";
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md text-white space-y-4">
-        <h1 className="text-3xl font-bold mb-4 text-center">
-          Enter Your Handles
-        </h1>
-        <input
-          type="text"
-          placeholder="Your name"
-          className="w-full p-2 rounded bg-gray-700 text-white"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="LeetCode username"
-          className="w-full p-2 rounded bg-gray-700 text-white"
-          value={leetcode}
-          onChange={(e) => setLeetcode(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Codeforces username"
-          className="w-full p-2 rounded bg-gray-700 text-white"
-          value={codeforces}
-          onChange={(e) => setCodeforces(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="CodeChef username"
-          className="w-full p-2 rounded bg-gray-700 text-white"
-          value={codechef}
-          onChange={(e) => setCodechef(e.target.value)}
-        />
-        <button
-          onClick={handleSubmit}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+    <div className="min-h-screen bg-gray-900">
+      <Navbar />
+      <div className="flex flex-col items-center justify-center min-h-screen p-8">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gray-800 rounded-lg shadow-xl p-8 mb-8 w-full max-w-md"
+          noValidate
         >
-          View Profile
-        </button>
+          <div className="flex items-center justify-center mb-6 space-x-2">
+            <h2 className="text-2xl font-bold text-white text-center">
+              CodeMate
+            </h2>
+            <FaCode className="text-orange-500 text-2xl" />
+          </div>
+
+          {[
+            { id: "name", label: "Username", value: name, setValue: setName },
+            {
+              id: "leetques",
+              label: "LeetCode ID",
+              value: leetques,
+              setValue: setLeetques,
+            },
+            {
+              id: "codeforcesRating",
+              label: "Codeforces ID",
+              value: codeforcesRating,
+              setValue: setCodeforcesRating,
+            },
+            {
+              id: "codechefRating",
+              label: "CodeChef ID",
+              value: codechefRating,
+              setValue: setCodechefRating,
+            },
+          ].map(({ id, label, value, setValue }) => (
+            <div className="mb-4" key={id}>
+              <label
+                htmlFor={id}
+                className="block text-white text-sm font-bold mb-2"
+              >
+                {label}:
+              </label>
+              <input
+                type="text"
+                id={id}
+                required
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                  errors[id] ? "border-red-500" : ""
+                }`}
+                placeholder={`Enter your ${label}`}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              />
+              {errors[id] && (
+                <p className="text-red-500 text-xs italic mt-1">{errors[id]}</p>
+              )}
+            </div>
+          ))}
+
+          <div className="flex items-center justify-center">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-transform transform hover:scale-105"
+              type="submit"
+            >
+              Let's Go!!
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
