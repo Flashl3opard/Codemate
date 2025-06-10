@@ -103,7 +103,7 @@ export default function Index() {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-transform transform hover:scale-105"
               type="submit"
             >
-              Let's Go!!
+              Let&apos;s Go!!
             </button>
           </div>
         </form>
