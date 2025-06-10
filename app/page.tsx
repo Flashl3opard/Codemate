@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import { FaCode } from "react-icons/fa";
+import Footer from "./components/Footer";
 
 export default function Index() {
   const [name, setName] = useState("");
@@ -40,6 +41,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-gray-900">
       <Navbar />
+
       <div className="flex flex-col items-center justify-center min-h-screen p-8">
         <form
           onSubmit={handleSubmit}
@@ -107,6 +109,7 @@ export default function Index() {
             </button>
           </div>
         </form>
+        <Footer />
       </div>
     </div>
   );
