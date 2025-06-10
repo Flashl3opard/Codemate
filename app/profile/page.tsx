@@ -16,7 +16,7 @@ export default function Index() {
   const [codeforcesRank, setCodeforcesRank] = useState("Unrated");
 
   const [codechefRating, setCodechefRating] = useState(0);
-  const [codechefContests, setCodechefContests] = useState(0); // Optional
+  const [codechefCountryRank, setCodechefCountryRank] = useState(0);
   const [codechefMaxRating, setCodechefMaxRating] = useState(0);
   const [codechefStars, setCodechefStars] = useState("Unrated");
 
@@ -30,7 +30,6 @@ export default function Index() {
       const cf = userData.codeforces;
       const cc = userData.codechef;
 
-      // LeetCode API
       if (leet) {
         fetch(`https://competeapi.vercel.app/user/leetcode/${leet}`)
           .then((res) => res.json())
@@ -51,7 +50,6 @@ export default function Index() {
           });
       }
 
-      // Codeforces API
       if (cf) {
         fetch(`https://competeapi.vercel.app/user/codeforces/${cf}`)
           .then((res) => res.json())
@@ -65,7 +63,6 @@ export default function Index() {
           });
       }
 
-      // CodeChef API
       if (cc) {
         fetch(`https://competeapi.vercel.app/user/codechef/${cc}`)
           .then((res) => res.json())
@@ -73,7 +70,7 @@ export default function Index() {
             setCodechefRating(data.rating_number);
             setCodechefMaxRating(data.max_rank);
             setCodechefStars(data.rating);
-            setCodechefContests(0); // Update if API adds this
+            setCodechefCountryRank(data.country_rank || 0);
           });
       }
     }
@@ -159,16 +156,16 @@ export default function Index() {
             </div>
             <div className="flex flex-col gap-4 flex-1 ml-4">
               <div className="bg-amber-700 p-4 text-lg rounded-xl flex flex-col items-center">
-                <h1 className="text-yellow-300 text-base">Contests</h1>
-                <h1 className="text-sm">{codechefContests}</h1>
+                <h1 className="text-orange-300 text-base">Stars</h1>
+                <h1 className="text-xs">{codechefStars}</h1>
               </div>
               <div className="bg-amber-700 p-4 text-lg rounded-xl flex flex-col items-center">
                 <h1 className="text-amber-300 text-base">Max Rating</h1>
                 <h1 className="text-sm">{codechefMaxRating}</h1>
               </div>
               <div className="bg-amber-700 p-4 text-lg rounded-xl flex flex-col items-center">
-                <h1 className="text-orange-300 text-base">Stars</h1>
-                <h1 className="text-xs">{codechefStars}</h1>
+                <h1 className="text-yellow-300 text-base">Country Rank</h1>
+                <h1 className="text-sm">{codechefCountryRank}</h1>
               </div>
             </div>
           </div>
