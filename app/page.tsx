@@ -28,9 +28,9 @@ export default function Index() {
 
     const userData = {
       name: name.trim(),
-      leetCodeId: leetques.trim(),
-      codeforcesId: codeforcesRating.trim(),
-      codechefId: codechefRating.trim(),
+      leetcode: leetques.trim(),
+      codeforces: codeforcesRating.trim(),
+      codechef: codechefRating.trim(),
     };
 
     localStorage.setItem("userData", JSON.stringify(userData));
@@ -53,37 +53,27 @@ export default function Index() {
             <FaCode className="text-orange-500 text-2xl" />
           </div>
 
-          {/* Inputs */}
           {[
-            {
-              id: "name",
-              label: "Username",
-              value: name,
-              setValue: setName,
-              errorKey: "name",
-            },
+            { id: "name", label: "Username", value: name, setValue: setName },
             {
               id: "leetques",
               label: "LeetCode ID",
               value: leetques,
               setValue: setLeetques,
-              errorKey: "leetques",
             },
             {
               id: "codeforcesRating",
               label: "Codeforces ID",
               value: codeforcesRating,
               setValue: setCodeforcesRating,
-              errorKey: "codeforcesRating",
             },
             {
               id: "codechefRating",
               label: "CodeChef ID",
               value: codechefRating,
               setValue: setCodechefRating,
-              errorKey: "codechefRating",
             },
-          ].map(({ id, label, value, setValue, errorKey }) => (
+          ].map(({ id, label, value, setValue }) => (
             <div className="mb-4" key={id}>
               <label
                 htmlFor={id}
@@ -96,22 +86,14 @@ export default function Index() {
                 id={id}
                 required
                 className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                  errors[errorKey] ? "border-red-500" : ""
+                  errors[id] ? "border-red-500" : ""
                 }`}
                 placeholder={`Enter your ${label}`}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                aria-describedby={`${id}-error`}
-                aria-invalid={!!errors[errorKey]}
               />
-              {errors[errorKey] && (
-                <p
-                  className="text-red-500 text-xs italic mt-1"
-                  role="alert"
-                  id={`${id}-error`}
-                >
-                  {errors[errorKey]}
-                </p>
+              {errors[id] && (
+                <p className="text-red-500 text-xs italic mt-1">{errors[id]}</p>
               )}
             </div>
           ))}
